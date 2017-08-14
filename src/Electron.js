@@ -13,7 +13,7 @@ exports.openWindowImpl = function openWindowImpl (ps) {
     mainWindow = new BrowserWindow({width: ps.width, height: ps.height});
 
     // and load the index.html of the app.
-    mainWindow.loadURL(path.join("file://", __dirname, ps.file));
+    mainWindow.loadURL(path.join("file://", ps.file));
 
     // Open the DevTools.
     mainWindow.webContents.openDevTools();
