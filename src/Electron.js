@@ -1,7 +1,6 @@
 "use strict"
 
 var electron = require('electron');
-console.log(electron);
 var app = electron.app;
 var BrowserWindow = electron.BrowserWindow;
 var path = require('path');
@@ -17,7 +16,7 @@ exports.openWindowImpl = function openWindowImpl (ps) {
     mainWindow.loadURL(path.join("file://", __dirname, ps.file));
 
     // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools();
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
