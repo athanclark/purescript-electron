@@ -8,12 +8,12 @@ var path = require('path');
 var mainWindow;
 
 exports.openWindowImpl = function openWindowImpl (ps) {
-  function createWindow () {
+  var createWindow = function createWindow () {
     // Create the browser window.
-    mainWindow = new BrowserWindow({width: 800, height: 600});
+    mainWindow = new BrowserWindow({width: ps.width, height: ps.height});
 
     // and load the index.html of the app.
-    mainWindow.loadURL(path.join('file://', __dirname, ps.file);
+    mainWindow.loadURL(path.join("file://", __dirname, ps.file));
 
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
@@ -25,7 +25,7 @@ exports.openWindowImpl = function openWindowImpl (ps) {
       // when you should delete the corresponding element.
       mainWindow = null;
     });
-  }
+  };
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.

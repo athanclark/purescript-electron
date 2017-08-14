@@ -2,7 +2,7 @@ module Electron (OpenWindowParams, ELECTRON, openWindow) where
 
 import Prelude
 import Control.Monad.Eff (kind Effect, Eff)
-import Control.Monad.Eff.Uncurried (EffFn1)
+import Control.Monad.Eff.Uncurried (EffFn1, runEffFn1)
 
 
 
