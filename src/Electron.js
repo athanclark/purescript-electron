@@ -1,6 +1,7 @@
 "use strict"
 
 var electron = require('electron');
+console.log(electron);
 var app = electron.app;
 var BrowserWindow = electron.BrowserWindow;
 var path = require('path');
