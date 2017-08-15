@@ -1,4 +1,4 @@
-module Electron (OpenWindowParams, ELECTRON, openWindow) where
+module Electron (OpenWindowParams, ELECTRON, openWindow, webview) where
 
 import Prelude
 import Control.Monad.Eff (kind Effect, Eff)
