@@ -3,6 +3,7 @@ module Electron.Main (registerAsyncHandler, registerSyncHandler) where
 import Electron.Types (ELECTRON)
 
 import Prelude
+import Data.Argonaut (Json)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Uncurried (EffFn1, runEffFn1, mkEffFn1)
 
@@ -12,10 +13,10 @@ foreign import registerAsyncHandlerImpl :: forall eff.
                  EffFn1 (electron :: ELECTRON | eff)
                    { channel :: String
                    , handle :: EffFn1 (electron :: ELECTRON | eff)
-                       { message :: String
+                       { message :: Json
                        , send :: EffFn1 (electron :: ELECTRON | eff)
                            { channel :: String
-                           , message :: String
+                           , message :: Json
                            } Unit
                        } Unit
                    } Unit
@@ -24,9 +25,9 @@ foreign import registerAsyncHandlerImpl :: forall eff.
 registerAsyncHandler :: forall eff
                       . { channel :: String
                         , handle ::
-                            { message :: String
+                            { message :: Json
                             , send :: { channel :: String
-                                      , message :: String
+                                      , message :: Json
                                       }
                                    -> Eff (electron :: ELECTRON | eff) Unit
                             } -> Eff (electron :: ELECTRON | eff) Unit
