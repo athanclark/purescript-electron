@@ -1,6 +1,7 @@
-module Electron (OpenWindowParams, openWindow, webview) where
+module Electron (OpenWindowParams, openWindow, webview, module Types) where
 
 import Electron.Types (ELECTRON)
+import Electron.Types as Types
 
 import Prelude
 import Control.Monad.Eff (Eff)
