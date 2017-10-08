@@ -15,6 +15,7 @@ type OpenWindowParams =
   { file :: String -- Relative
   , width :: Int
   , height :: Int
+  , devTools :: Boolean
   }
 
 foreign import openWindowImpl :: forall eff. EffFn1 (electron :: ELECTRON | eff) OpenWindowParams Unit

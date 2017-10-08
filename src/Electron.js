@@ -16,7 +16,9 @@ exports.openWindowImpl = function openWindowImpl (ps) {
     mainWindow.loadURL(path.join("file://", ps.file));
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    if (ps.devTools) {
+      mainWindow.webContents.openDevTools();
+    }
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
