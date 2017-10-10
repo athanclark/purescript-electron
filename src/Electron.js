@@ -27,6 +27,14 @@ exports.openWindowImpl = function openWindowImpl (ps) {
       // when you should delete the corresponding element.
       mainWindow = null;
     });
+
+    mainWindow.webContents.on('did-finish-load', function () {
+      ps.whenLoaded({
+        send: function asyncSendImpl (x) {
+          mainWindow.webContents.send(x.channel,x.message);
+        }
+      });
+    });
   };
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.

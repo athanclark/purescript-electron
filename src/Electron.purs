@@ -18,7 +18,7 @@ foreign import openWindowImpl :: forall eff. EffFn1 (electron :: ELECTRON | eff)
                                     , height :: Int
                                     , devTools :: Boolean
                                     , whenLoaded :: EffFn1 (electron :: ELECTRON | eff)
-                                                      { send :: EffFn1 (electron :: ELECTRON | eff) Json Unit
+                                                      { send :: EffFn1 (electron :: ELECTRON | eff) {channel :: String, message :: Json} Unit
                                                       } Unit
                                     } Unit
 
@@ -26,7 +26,7 @@ openWindow :: forall eff. { file :: String
                           , width :: Int
                           , height :: Int
                           , devTools :: Boolean
-                          , whenLoaded :: { send :: Json -> Eff (electron :: ELECTRON | eff) Unit
+                          , whenLoaded :: { send :: {channel :: String, message :: Json} -> Eff (electron :: ELECTRON | eff) Unit
                                           } -> Eff (electron :: ELECTRON | eff) Unit
                           } -> Eff (electron :: ELECTRON | eff) Unit
 openWindow {file,width,height,devTools,whenLoaded} =
