@@ -1,27 +1,39 @@
-module Electron (OpenWindowParams, openWindow, webview, module Types) where
+module Electron (openWindow, webview, module Types) where
 
 import Electron.Types (ELECTRON)
 import Electron.Types as Types
 
 import Prelude
+import Data.Argonaut (Json)
 import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Uncurried (EffFn1, runEffFn1)
+import Control.Monad.Eff.Uncurried (EffFn1, runEffFn1, mkEffFn1)
 
 import React (ReactElement, createElementTagName)
 
 
 
-type OpenWindowParams =
-  { file :: String -- Relative
-  , width :: Int
-  , height :: Int
-  , devTools :: Boolean
-  }
+foreign import openWindowImpl :: forall eff. EffFn1 (electron :: ELECTRON | eff)
+                                    { file :: String
+                                    , width :: Int
+                                    , height :: Int
+                                    , devTools :: Boolean
+                                    , whenLoaded :: EffFn1 (electron :: ELECTRON | eff)
+                                                      { send :: EffFn1 (electron :: ELECTRON | eff) Json Unit
+                                                      } Unit
+                                    } Unit
 
-foreign import openWindowImpl :: forall eff. EffFn1 (electron :: ELECTRON | eff) OpenWindowParams Unit
-
-openWindow :: forall eff. OpenWindowParams -> Eff (electron :: ELECTRON | eff) Unit
-openWindow = runEffFn1 openWindowImpl
+openWindow :: forall eff. { file :: String
+                          , width :: Int
+                          , height :: Int
+                          , devTools :: Boolean
+                          , whenLoaded :: { send :: Json -> Eff (electron :: ELECTRON | eff) Unit
+                                          } -> Eff (electron :: ELECTRON | eff) Unit
+                          } -> Eff (electron :: ELECTRON | eff) Unit
+openWindow {file,width,height,devTools,whenLoaded} =
+  runEffFn1 openWindowImpl
+    { file, width, height, devTools
+    , whenLoaded: mkEffFn1 \{send} -> whenLoaded {send: runEffFn1 send}
+    }
 
 
 webview :: forall props. { | props } -> Array ReactElement -> ReactElement
