@@ -11,6 +11,11 @@ import Control.Monad.Eff.Uncurried (EffFn1, runEffFn1, mkEffFn1)
 import React (ReactElement, createElementTagName)
 
 
+type Event eff =
+  { preventDefault :: Eff eff Unit
+  }
+
+
 
 foreign import openWindowImpl :: forall eff. EffFn1 (electron :: ELECTRON | eff)
                                     { file :: String
@@ -20,6 +25,8 @@ foreign import openWindowImpl :: forall eff. EffFn1 (electron :: ELECTRON | eff)
                                     , whenLoaded :: EffFn1 (electron :: ELECTRON | eff)
                                                       { send :: EffFn1 (electron :: ELECTRON | eff) {channel :: String, message :: Json} Unit
                                                       } Unit
+                                    , beforeQuit :: EffFn1 (electron :: ELECTRON | eff)
+                                                      (Event (electron :: ELECTRON | eff)) Unit
                                     } Unit
 
 openWindow :: forall eff. { file :: String
@@ -28,11 +35,13 @@ openWindow :: forall eff. { file :: String
                           , devTools :: Boolean
                           , whenLoaded :: { send :: {channel :: String, message :: Json} -> Eff (electron :: ELECTRON | eff) Unit
                                           } -> Eff (electron :: ELECTRON | eff) Unit
+                          , beforeQuit :: Event (electron :: ELECTRON | eff) -> Eff (electron :: ELECTRON | eff) Unit
                           } -> Eff (electron :: ELECTRON | eff) Unit
-openWindow {file,width,height,devTools,whenLoaded} =
+openWindow {file,width,height,devTools,whenLoaded,beforeQuit} =
   runEffFn1 openWindowImpl
     { file, width, height, devTools
     , whenLoaded: mkEffFn1 \{send} -> whenLoaded {send: runEffFn1 send}
+    , beforeQuit: mkEffFn1 beforeQuit
     }
 
 
